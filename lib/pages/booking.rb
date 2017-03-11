@@ -27,7 +27,6 @@ class Booking < Page
   def initialize
     wait_for_flight_list(10)
     family_extra_widget.continue.click if has_family_extra_widget?
-    # wait_for_ajax
   end
 
   def choose_time_and_class

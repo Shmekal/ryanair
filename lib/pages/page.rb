@@ -5,18 +5,7 @@ require 'capybara/dsl'
 require 'capybara/rspec'
 require 'uri'
 require 'site_prism'
-require 'vars'
-
-# # workaround to keep browser alive for debugging after test completion
-# Capybara::Selenium::Driver.class_eval do
-#   def quit
-#     puts "Press RETURN to quit the browser"
-#     $stdin.gets
-#     @browser.quit
-#   rescue Errno::ECONNREFUSED
-#     # Browser must have already gone
-#   end
-# end
+require 'constants'
 
 class Page < SitePrism::Page
   include Capybara::DSL
@@ -27,6 +16,8 @@ class Page < SitePrism::Page
     Capybara.app_host = 'https://www.ryanair.com/ie/en'
   end
 
+  # METHODS BELOW - looking for solution with waiting for elements
+  # TO BE REMOVED - couldn't make it work
   def wait_for_ajax
     Timeout.timeout(Capybara.default_wait_time) do
       active = evaluate_script('jQuery.active')
@@ -36,9 +27,9 @@ class Page < SitePrism::Page
     end
   end
 
-
+# TO BE REMOVED - sleeps are inapropriate
   def waitwait(n=5)
     timeout = Time.now + n
-    until Time.now > timeout end
+    until Time.now > timeout; end
   end
 end

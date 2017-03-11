@@ -20,6 +20,8 @@ class PassengerDetailsSection < SitePrism::Section
 end
 
 class Payment < Page
+  include Constants
+
   set_url "/booking/payment"
 
   section :signup_modal, SignupModalSection, '.signup-modal'
@@ -64,7 +66,7 @@ class Payment < Page
   end
 
   def fill_in_passenger_details
-waitwait(2)
+waitwait
     main_area.passenger_details.each_with_index do |passenger, i|
       n = %w(one two three four)
       passenger.title.select('Ms')
@@ -74,19 +76,19 @@ waitwait(2)
   end
 
   def fill_in_payment_and_contact_details
-    main_area.phone_country.select("Poland")
-    main_area.phone_number.set '1234567890'
-    main_area.cc_number.set '5105105105105100'
-    main_area.cc_type.select('MasterCard')
-    main_area.cc_month.select('2')
-    main_area.cc_year.select('2020')
-    main_area.cc_cvv.set '123'
-    main_area.cc_holder_name.set 'Test Test'
-    main_area.address_line_1.set 'Test Test'
-    main_area.address_line_2.set 'Test Test'
-    main_area.city.set 'Wroclaw'
-    main_area.postcode.set '12-345'
-    main_area.country.select('Poland')
+    main_area.phone_country.select(PHONE_COUNTRY)
+    main_area.phone_number.set PHONE_NUMBER
+    main_area.cc_number.set CC_NUMBER
+    main_area.cc_type.select(CC_TYPE)
+    main_area.cc_month.select(CC_MONTH)
+    main_area.cc_year.select(CC_YEAR)
+    main_area.cc_cvv.set CC_CVV
+    main_area.cc_holder_name.set CC_HOLDER_NAME
+    main_area.address_line_1.set ADDRESS_LINE_1
+    main_area.address_line_2.set ADDRESS_LINE_2
+    main_area.city.set CITY
+    main_area.postcode.set POSTCODE
+    main_area.country.select(COUNTRY)
     main_area.accept_terms.click
     execute_script "window.scrollBy(0,300)"
     main_area.pay_now.click

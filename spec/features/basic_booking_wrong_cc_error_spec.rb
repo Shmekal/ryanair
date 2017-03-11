@@ -21,7 +21,7 @@ feature "Verify basic booking with wrong CC number error" do
 
   feature "Basic booking for 2 adults and 2 children" do
     context "Using invalid credit card" do
-      scenario "Error arises after submitting payment form" do
+      scenario "Error should arise after submitting payment form" do
         expect(@page.verify_error).to include(ERROR_TEXT)
       end
     end
