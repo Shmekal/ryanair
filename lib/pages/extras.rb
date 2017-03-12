@@ -14,15 +14,15 @@ class Extras < Page
   section :cart, '.cart.cart' do
     element :check_out_btn, 'button>span'
   end
+  element :pick_seats_offer, '.section-seats'
 
   def initialize
     wait_for_cart(10)
   end
 
   def proceed_to_check_out
+    wait_for_pick_seats_offer(10)
     execute_script "window.scrollBy(0,-1000)"
-waitwait
-    cart.wait_for_check_out_btn(3)
     cart.check_out_btn.click
     wait_for_reserve_seat_widget(3)
     reserve_seat_widget.cancel_btn.click if has_reserve_seat_widget?

@@ -16,7 +16,26 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'pages/home'
+require 'pages/booking'
+require 'pages/extras'
+require 'pages/payment'
+include Constants
+
 RSpec.configure do |config|
+
+  Capybara.register_driver :chrome do |app|
+    Capybara::Selenium::Driver.new(app, :browser => :chrome)
+  end
+  Capybara.register_driver :firefox do |app|
+    Capybara::Selenium::Driver.new(app, :browser => :firefox)
+  end
+  # Capybara.javascript_driver = :chrome
+
+  SitePrism.configure do |config|
+    config.use_implicit_waits = false
+  end
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

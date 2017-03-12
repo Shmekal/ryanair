@@ -45,7 +45,7 @@ class Payment < Page
     element :city, '[id$="City"]'
     element :postcode, '[id$="Postcode"]'
     element :country, '[id$="Country"]'
-    element :accept_terms, '.terms input'
+    element :accept_terms, '.cta label'
     element :pay_now, 'button'
     section :error, '[ng-if="pf.serverError"]' do
       element :error_msg, '.error'
@@ -62,11 +62,10 @@ class Payment < Page
     signup_modal.email.set login
     signup_modal.password.set password
     signup_modal.log_in_btn.click
-    wait_until_signup_modal_invisible(5)
   end
 
   def fill_in_passenger_details
-waitwait
+    main_area.wait_until_passenger_details_visible(5)
     main_area.passenger_details.each_with_index do |passenger, i|
       n = %w(one two three four)
       passenger.title.select('Ms')
@@ -89,8 +88,9 @@ waitwait
     main_area.city.set CITY
     main_area.postcode.set POSTCODE
     main_area.country.select(COUNTRY)
-    main_area.accept_terms.click
     execute_script "window.scrollBy(0,300)"
+    # main_area.wait_for_accept_terms(5)
+    main_area.accept_terms.click
     main_area.pay_now.click
   end
 

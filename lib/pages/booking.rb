@@ -2,7 +2,6 @@
 
 require 'pages/page'
 
-
 class FamilyExtraWidgetSection < SitePrism::Section
   element :continue, '.core-btn-primary'
 end
@@ -13,7 +12,6 @@ class FlightFaresSection < SitePrism::Section
   end
 end
 
-
 class Booking < Page
   set_url '/booking/home'
   section :family_extra_widget, FamilyExtraWidgetSection, '.modal-dialog.family'
@@ -21,7 +19,7 @@ class Booking < Page
     section :flight_fares, FlightFaresSection, '.flights-table-fares__wrapper'
     elements :flights, '.flight-header'
   end
-  element :continue_btn_bottom, '#continue'
+  element :continue_btn_bottom, '[class$="footer"]>button#continue'
   element :continue_btn_disabled, '#continue[disabled="disabled"]'
 
   def initialize
@@ -29,21 +27,19 @@ class Booking < Page
     family_extra_widget.continue.click if has_family_extra_widget?
   end
 
-  def choose_time_and_class
-waitwait(5)
-    flight_list.first.flights.first.click
-    flight_list.first.wait_for_flight_fares(3)
-    flight_list.first.flight_fares.classes.first.select_btn.click
-waitwait(2)
-    flight_list.first.wait_until_flight_fares_invisible(5)
+  def choose_time_and_class(dir)
+    i = dir == :to ? 0 : 1
+    flight_list[i].flights.first.click
+    flight_list[i].flight_fares.classes.first.wait_for_select_btn
+    flight_list[i].flight_fares.classes.first.select_btn.click
+    # t = Time.now + 2
+    # until Time.now > t ; end
+    # flight_list.last.flights.first.click
+    # flight_list.last.flight_fares.classes.first.wait_for_select_btn
+    # flight_list.last.flight_fares.classes.first.select_btn.click
+  end
 
-    flight_list.last.flights.first.click
-    flight_list.last.wait_for_flight_fares(3)
-    flight_list.last.flight_fares.classes.first.select_btn.click
-waitwait(2)
-    flight_list.last.wait_until_flight_fares_invisible(3)
-
-    wait_until_continue_btn_disabled_invisible(5)
+  def submit_time_and_class_form
     continue_btn_bottom.click
     Extras.new
   end

@@ -1,4 +1,4 @@
-# lib/vars.rb
+# lib/constants.rb
 
 module Constants
   # credentials

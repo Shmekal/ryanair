@@ -1,27 +1,30 @@
 # spec/features/basic_booking_wrong_cc_error.rb
 
-require 'pages/home'
-require 'pages/booking'
-require 'pages/extras'
-require 'pages/payment'
-include Constants
+require 'spec_helper'
 
-feature "Verify basic booking with wrong CC number error" do
-
-  background do
-    @page = Home.new
-    @page.navigate_to_home_page
-    @page = @page.fill_search_flight_form
-    @page = @page.choose_time_and_class
-    @page = @page.proceed_to_check_out
-    @page.log_in(LOGIN, PASSWORD)
-    @page.fill_in_passenger_details
-    @page.fill_in_payment_and_contact_details
-  end
-
-  feature "Basic booking for 2 adults and 2 children" do
-    context "Using invalid credit card" do
+feature "Make basic booking" do
+  context "for 2 adults and 2 teens" do
+    context "use invalid credit card" do
       scenario "Error should arise after submitting payment form" do
+        # home
+        @page = Home.new
+        @page.navigate_to_home_page
+        @page = @page.fill_search_flight_form
+        # booking
+        expect(@page).to have_selector('.flights-table .flight-header')
+        @page.choose_time_and_class(:to)
+        expect(@page).not_to have_selector('.flights-table-fares__wrapper')
+        @page.choose_time_and_class(:from)
+        expect(@page).not_to have_selector('#continue[disabled="disabled"]')
+        @page = @page.submit_time_and_class_form
+        # extra
+        @page = @page.proceed_to_check_out
+        # payment
+        @page.log_in(LOGIN, PASSWORD)
+        expect(@page).not_to have_selector('.login-register-checkout-compact')
+        @page.fill_in_passenger_details
+        @page.fill_in_payment_and_contact_details
+        # error validation
         expect(@page.verify_error).to include(ERROR_TEXT)
       end
     end
